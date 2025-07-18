@@ -1,114 +1,71 @@
-# 🧪 QA Playwright Challenge – Relke
+# Test Automatizado Playwright - Validación Nota de Venta sin Productos
 
-¡Bienvenido/a! Este es el desafío técnico para el proceso de selección de **QA Engineer Junior** en Relke 🚀
-
----
-
-## 🤔 ¿Qué buscamos?
-
-En Relke creemos en el crecimiento desde el aprendizaje. Este desafío no busca medir cuántos años de experiencia tienes, sino **cómo aplicas tus conocimientos actuales, tu motivación por aprender y tu capacidad para enfrentar un flujo real de automatización**.
-
-> 🧩 **No es excluyente si tienes menos de 1 año de experiencia.** Si estás recién egresado/a o en tus primeras experiencias laborales, ¡también puedes participar!
-
-Lo importante es que, con tu formación académica y dedicación, **puedas resolver este reto en un tiempo realista (48 horas)** y mostrar cómo piensas como QA.
+Este proyecto contiene un test automatizado utilizando [Playwright](https://playwright.dev/) para validar que **Flujo completo de creación de Nota de Venta, no se permite crear una nota de venta sin agregar productos y Cerrar sesión correctamente** en la plataforma.
 
 ---
 
-## 🎯 Desafío
+## 🧪 Cómo ejecutar la prueba
 
-Tu misión es automatizar con Playwright el flujo de **creación de una Nota de Venta** en nuestro sistema demo:
+### 1. Instalar dependencias
 
-- 🌐 URL: [https://demo.relbase.cl](https://demo.relbase.cl)
-- 👤 Usuario: `qa_junior@relke.cl`
-- 🔐 Contraseña: `Demo123456!`
+Primero, asegúrate de tener Node.js instalado, luego ejecuta:
 
-### Pasos mínimos esperados
+```bash
+npm install
+npm install -D @playwright/test
+npx playwright install
+npx playwright install chromium
+```
 
-1. Iniciar sesión
-2. Ir a **Ventas > Notas de Venta**
-3. Hacer clic en **Crear nueva nota**
-4. Completar los datos mínimos:
-   - Seleccionar sucursal (Casa matriz)
-   - Seleccionar bodega (Principal)
-   - Seleccionar un cliente (⚠️ puede variar el nombre)
-   - Seleccionar moneda (Pesos)
-   - Agregar al menos un producto
-   - Validar que se calcula un total
-5. Guardar y verificar que aparece en el listado con el total correcto
+### 2. Ejecutar el test
 
----
+Usa el siguiente comando para ejecutar el test:
 
-## 💡 Reglas y condiciones especiales
+```bash
+npx playwright test o npx playwright test --headed
+```
 
-- El total debe ser **mayor a $0** y reflejar el precio del producto agregado.
-- Evita usar esperas estáticas (`waitForTimeout`). Usa selectores confiables y `await expect(...)`.
-- Puedes usar Page Object Model si lo prefieres, pero no es obligatorio.
+> Asegúrate de que el entorno esté disponible y accesible en el navegador que Playwright abre (por ejemplo, https://demo.relbase.cl o la URL correspondiente al entorno QA).
 
 ---
 
-## 📤 ¿Cómo entregar tu prueba en GitHub?
+## ✅ Validaciones realizadas
 
-Como el repositorio original de Relke en Bitbucket es público pero de solo lectura, te pedimos que:
+- Inicio de sesión con un usuario válido (`qa_junior@relke.cl`).
+- Acceso al módulo de ventas y creación de una nueva nota de venta.
+- Selección de datos obligatorios:
+  - Sucursal (`Casa matriz`)
+  - Bodega (`Bodega principal`)
+  - Cliente (`FALABELLA`)
+  - Moneda (`Pesos`)
+- **Validación principal:** al hacer clic en el botón **"Enviar"** sin agregar ningún producto, se espera que aparezca un mensaje de error o validación que indique que falta agregar productos.
 
-1. Clones este repo:
-   ```bash
-   git clone https://bitbucket.org/relke/relke-qa-challenge.git
-   cd relke-qa-challenge
-   ```
-
-2. Crees un nuevo repositorio en **tu cuenta personal de GitHub** (puede ser público o privado).
-
-3. Cambies el origen remoto en tu entorno local:
-   ```bash
-   git remote remove origin
-   git remote add origin https://github.com/tu_usuario/relke-qa-respuesta.git
-   git push -u origin main
-   ```
-4. Agrega tus pruebas automatizadas dentro de la carpeta `tests/`
-
-5. Crea un `README` dentro de tu repositorio explicando:
-   - Cómo ejecutar tu test
-   - Qué validaciones hiciste
-   - Qué desafíos tuviste o decisiones tomaste
-
-6. Haz commit y push 
-
-7. Comparte el link del repositorio (y acceso si es privado) por mensaje de Get on board de la postulación
-
-> Si no tienes cuenta en GitHub, puedes crear una gratuita en https://github.com
+Se valida específicamente que exista un mensaje de error en pantalla que contenga la palabra `producto`.
 
 ---
 
-## 📽️ Opcional: muestra tu forma de trabajar
+## ⚠️ Desafíos o decisiones tomadas
 
-Si quieres destacarte, puedes grabar un video (máx 10 min) mostrando cómo trabajaste el desafío: tus pasos, pruebas, validaciones o errores encontrados.
-
----
-
-## 🧩 Bonus (opcional)
-
-Puedes agregar validaciones extra como:
-
-- Prueba negativa: ¿qué pasa si no agrego productos?
-- Validación de error de campo requerido
-- Automatización de logout o expiración de sesión
+- **Identificación del botón de envío:** Fue necesario usar el selector `button[type="submit"].btn.btn-primary` para garantizar que se haga clic en el botón correcto que ejecuta la acción de envío de la nota.
+- **Manejo de Select2:** Las cajas desplegables como sucursal, bodega y cliente utilizan Select2, por lo que se manipuló el DOM directamente simulando clics y búsquedas.
+- **Confirmaciones automáticas:** Se omitió la confirmación del `onclick="return confirm(...)"` del botón para simular de manera eficiente el flujo de prueba automatizado.
 
 ---
 
-## ⏱️ Tiempo estimado
+## 📁 Estructura del proyecto
 
-Tienes **48 horas** desde que recibes esta pauta.
-
----
-
-## 🧠 Consejos
-
-- Usa `npx playwright codegen` si necesitas inspiración, pero asegúrate de entender y limpiar el código generado.
-- Lee los selectores con cuidado. A veces un texto cambia según el estado.
-- Escribe como si tu test fuera a mantenerse en producción.
-- No estamos buscando perfección, sino **compromiso, criterio y capacidad de automatizar flujos funcionales reales**.
+```
+tests/
+├── nota-venta.spec.ts      # Test automatizado principal
+README.md                   # Este archivo
+```
 
 ---
 
-¡Mucho éxito! 💥  
-Relke QA Team
+## 📌 Requisitos previos
+
+- Node.js v16+
+- Navegador compatible (Chromium, Firefox o WebKit)
+- Acceso a la URL de pruebas
+
+---
