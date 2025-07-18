@@ -7,6 +7,18 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
+    "playwright": "^1.54.1",
     "typescript": "^5.3.3"
-  }
+  },
+  "description": "¡Bienvenido/a! Este es el desafío técnico para el proceso de selección de **QA Engineer Junior** en Relke 🚀",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "playwright-core": "^1.54.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
